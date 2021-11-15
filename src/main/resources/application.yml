@@ -8,7 +8,3 @@ spring:
             server:
                 git:
                     uri: https://github.com/dnilay/socgen-config-server.git
-    boot:
-        admin:
-            client:
-                url: http://localhost:8888
