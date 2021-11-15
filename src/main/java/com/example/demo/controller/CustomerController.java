@@ -15,9 +15,10 @@ import java.util.List;
 @RestController
 public class CustomerController {
 
+
     private CustomerService customerService;
 
-    @Autowired
+  //@Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
