@@ -1,0 +1,15 @@
+server:
+    port: 8082
+spring:
+    application:
+        name: customer-service
+    cloud:
+        config:
+            uri: http://localhost:8000
+    data:
+        mongodb:
+            uri: mongodb+srv://user1:12345@cluster0.c6wul.mongodb.net/playground?retryWrites=true&w=majority
+    boot:
+        admin:
+            client:
+                url: http://localhost:8888
