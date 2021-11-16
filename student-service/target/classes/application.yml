@@ -19,6 +19,10 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+  datasource:
+    url: jdbc:h2:mem:testDB
+    username: sa
+    password: sa
 management:
   endpoints:
     web:
