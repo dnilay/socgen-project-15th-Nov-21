@@ -1,0 +1,23 @@
+server:
+  port: 8080
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+spring:
+  application:
+    name: ApiGateway
+  cloud.gateway:
+    discovery:
+      locator:
+        enabled: true
+        lowerCaseServiceId: true
+    routes:
+    - id: school-ws
+      uri: lb://school-service
+      predicates:
+        - Path=/school/**
+    - id: student-ws
+      uri: lb://student-service
+      predicates:
+        - Path=/student/**
