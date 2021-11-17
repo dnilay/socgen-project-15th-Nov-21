@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -19,6 +22,8 @@ import com.example.demo.service.SchoolService;
 import com.example.demo.shared.SchoolProxy;
 import com.example.demo.shared.StudentDto;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @RestController
 @RequestMapping("/school")
 public class SchoolController {
@@ -26,7 +31,7 @@ public class SchoolController {
 	private SchoolService schoolService;
 	private Environment environment;
 	private SchoolProxy schoolProxy;
-	
+	private Logger logger=LoggerFactory.getLogger(SchoolController.class);
 	@Autowired
 	public SchoolController(SchoolService schoolService,Environment environment,SchoolProxy schoolProxy) {
 	
@@ -50,12 +55,17 @@ public class SchoolController {
 		return ResponseEntity.ok("school service is up and running on port: "+environment.getProperty("local.server.port"));
 	}
 	@GetMapping("/schools/{schoolName}")
+	@CircuitBreaker(name = "circuit-breaker-1",fallbackMethod = "testFallBack")
 	public ResponseEntity<List<StudentDto>> findStudentBySchoolName(@PathVariable("schoolName") String schoolName)
 	{
 		
 		return ResponseEntity.ok(schoolProxy.findStudentBySchoolName(schoolName));
 	}
 	
+	 private  ResponseEntity<String> testFallBack(Exception e){
+		 logger.error("within testFallBack");
+	        return new ResponseEntity<String>("student-service is down. try again", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	
 
 }
